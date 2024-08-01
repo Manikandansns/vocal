@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocal-Form</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            --gap: 1rem;
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            padding-top: 20px;
+            background-repeat: no-repeat;
+        }
+
+        label {
+            text-align: center;
+            line-height: 150%;
+            font-size: 23px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        legend {
+            text-align: center;
+            line-height: 150%;
+            -webkit-text-stroke: 1px rgb(224, 143, 143);
+            -webkit-text-fill-color: rgb(221, 38, 38);
+            font-size: 30px;
+            text-shadow: 0 2px white, 0 3px #777;
+        }
+
+        button {
+            background-color: hsl(90, 50%, 30%);
+            border: 0;
+            color: hsl(90, 50%, 95%);
+            margin-block-start: var(--gap);
+            padding: calc(var(--gap) / 2) var(--gap);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button.listening {
+            background-color: hsl(0, 50%, 50%);
+            color: hsl(0, 50%, 95%);
+        }
+
+        fieldset {
+            background-image: linear-gradient(to bottom right, rgb(243, 243, 243), rgb(72, 198, 230));
+            border-radius: 5px;
+            border: 3px solid #0b837d;
+            padding: var(--gap);
+        }
+
+        form {
+            margin: 0 auto;
+            max-width: 30rem;
+            border-radius: 5px;
+        }
+
+        input,
+        textarea {
+            border-radius: 8px;
+            padding: calc(var(--gap) / 2);
+            resize: vertical;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            font-weight: 400;
+            margin-block-start: var(--gap);
+        }
+
+        p {
+            font-size: small;
+        }
+
+        .div1 {
+            background-image: linear-gradient(to bottom right, rgb(243, 243, 243), rgb(72, 198, 230));
+            width: 55%;
+            border-radius: 10px;
+            height: 500px;
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            background-color: whitesmoke;
+            border: 3px solid #0b837d;
+            box-sizing: border-box;
+        }
+
+        .button {
+            background-color: white;
+            color: black;
+            border: 2px solid #0b837d;
+            width: 200px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            margin: 4px 2px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-image: linear-gradient(to bottom right, rgb(99, 207, 166), rgb(234, 236, 223));
+            color: rgb(0, 0, 0);
+        }
+    </style>
+</head>
+<body>
+    <div class="div1" id="homeScreen">
+        <legend id="heading">VOCALIZATION FORM FILLING</legend>
+        <label id="intro">Please press start button to continue</label>
+        <input class="button" type="button" value="Start" onclick="Start()">
+        <label id="chooseIntro">Please choose the form to fill</label>
+        <label id="adhar">Aadhar</label>
+        <label id="pan">Pan</label>
+    </div>
+    <div>
+        <form id="adhaarForm" name="adhaarForm" style="display: none">
+            <fieldset>
+                <legend>VOCALIZATION FORM FILLING AADHAR</legend>
+                <label>Name<input type="text" class="form-control" id="name"></label>
+                <label>Phone number<input type="text" class="form-control" id="phoneNumber"></label>
+                <label>Date of Birth<input type="text" class="form-control" id="dateOfBirth"></label>
+                <label>Gender<input type="text" class="form-control" id="Gender"></label>
+                <label>Village/town/city<input type="text" class="form-control" id="villageOrtownOrcity"></label>
+                <label>District<input type="text" class="form-control" id="District"></label>
+                <label>State<input type="text" class="form-control" id="state"></label>
+            </fieldset>
+        </form>
+        <form id="panForm" style="display: none">
+            <fieldset>
+                <legend>VOCALIZATION FORM FILLING PAN</legend>
+                <label>Name<input type="text" class="form-control" id="Name"></label>
+                <label>Age<input type="text" class="form-control" id="Age"></label>
+                <label>Aadhar number<input type="text" class="form-control" id="AadharNumber"></label>
+                <label>Date of Birth<input type="text" class="form-control" id="DateOfBirth"></label>
+                <label>Gender<input type="text" class="form-control" id="gender"></label>
+                <label>Village/town/city<input type="text" class="form-control" id="VillageOrTownOrCity"></label>
+                <label>District<input type="text" class="form-control" id="district"></label>
+                <label>State<input type="text" class="form-control" id="State"></label>
+            </fieldset>
+        </form>
+    </div>    
+
+    <script>
+        function Start() {
+            if ('speechSynthesis' in window) {
+                let ourText = "please choose the form to fill " + document.getElementById("adhar").textContent + " or " + document.getElementById("pan").textContent;
+                var to_speak = new SpeechSynthesisUtterance(ourText);
+                speechSynthesis.cancel();
+                window.speechSynthesis.speak(to_speak);
+                setTimeout(StartRecognizing, 3000);
+            } else {
+                console.log("Speech Synthesis not supported.");
+            }
+        }
+
+        function StartRecognizing() {
+            if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+                console.log("Web Speech API not supported.");
+                return;
+            }
+
+            var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            var recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                var i = event.results.length - 1;
+                var audio = event.results[i];
+                var text = audio[0].transcript.trim().toLowerCase();
+
+                console.log(text);
+
+                if (audio.isFinal) {
+                    recognition.stop();
+                    if (text === "aadhar") {
+                        document.getElementById("adhaarForm").style.display = "block";
+                        document.getElementById("panForm").style.display = "none";
+                        document.getElementById("homeScreen").style.display = "none";
+                    } else if (text === "pan") {
+                        document.getElementById("panForm").style.display = "block";
+                        document.getElementById("adhaarForm").style.display = "none";
+                        document.getElementById("homeScreen").style.display = "none";
+                    }
+                    GetFormValues(text === "aadhar" ? "adhaarForm" : "panForm");
+                }
+            };
+
+            recognition.onerror = function(event) {
+                console.error("Recognition error:", event.error);
+            };
+        }
+
+        var index = 0;
+        var formArray = [];
+
+        function GetFormValues(formId) {
+            var formInputs = document.forms[formId].elements;
+            formArray = formInputs;
+            index = 0;
+            GetInputValue();
+        }
+
+        function GetInputValue() {
+            if (index >= formArray.length) {
+                console.log("Completed");
+                return;
+            }
+
+            var element = formArray[index];
+            if (element.type === "text" || element.nodeName === "TEXTAREA") {
+                var to_speak = new SpeechSynthesisUtterance("Please say " + element.id);
+                speechSynthesis.cancel();
+                window.speechSynthesis.speak(to_speak);
+                setTimeout(() => GetUserInput(element), 3000);
+            } else {
+                index++;
+                GetInputValue();
+            }
+        }
+
+        function GetUserInput(element) {
+            if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+                console.log("Web Speech API not supported.");
+                return;
+            }
+
+            var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            var recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                var i = event.results.length - 1;
+                var audio = event.results[i];
+                var text = audio[0].transcript.trim();
+
+                if (audio.isFinal) {
+                    recognition.stop();
+                    element.value = text;
+                    index++;
+                    GetInputValue();
+                }
+            };
+
+            recognition.onerror = function(event) {
+                console.error("Recognition error:", event.error);
+                recognition.stop();
+            };
+        }
+    </script>
+</body>
+</html>
